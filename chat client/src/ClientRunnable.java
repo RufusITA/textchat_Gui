@@ -28,12 +28,15 @@ public class ClientRunnable implements Runnable {
                     a.apply(response);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+               a.apply("Error connection");
+               System.err.println("con err");
             } finally {
                 try {
                     input.close();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    a.apply("error disconnecting...");
+                    System.err.println("esploso");
+                    
                 }
             }
     }

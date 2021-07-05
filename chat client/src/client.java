@@ -26,6 +26,8 @@ public class client {
 				}
 			}
 		});*/
+    	while(true) {
+    		
     	
 		buffer b = w.getbuffer();
     	do {
@@ -68,3 +70,4 @@ public class client {
     	
 	}
 }
+	}

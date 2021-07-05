@@ -11,14 +11,18 @@ public class ServerThread extends Thread {
     private ArrayList<ServerThread> threadList;
     private PrintWriter output;
 
-    private Function a;
+    private Function<String, ?> a;
     
     public ServerThread(Socket socket, ArrayList<ServerThread> threads) {
         this.socket = socket;
         this.threadList = threads;
-        this.a = a;
+        extracted();
         
     }
+
+	private Function<String, ?> extracted() {
+		return this.a = a;
+	}
 
     @Override
     public void run() {
@@ -47,6 +51,7 @@ public class ServerThread extends Thread {
 
         } catch (Exception e) {
         	a.apply("Client Disconnesso");
+        	
         }
     }
 

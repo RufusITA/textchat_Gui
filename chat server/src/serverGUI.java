@@ -1,20 +1,19 @@
-import java.awt.EventQueue;
+
 
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+
 import javax.swing.JTextArea;
 import javax.swing.JLabel;
 
+
 public class serverGUI {
 
-	private static final String String = null;
 	private JFrame frmServer;
 	private JTextField porta;
-
+	private JTextArea log;
+	
 	private boolean run = false;
 	
 	public serverGUI() {
@@ -30,7 +29,7 @@ public class serverGUI {
 	public void initialize() {
 		frmServer = new JFrame();
 		frmServer.setResizable(false);
-		frmServer.setTitle("Server ");
+		frmServer.setTitle("Server pre-alpha V.0.12");
 		frmServer.setBounds(100, 100, 510, 326);
 		frmServer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmServer.getContentPane().setLayout(null);
@@ -48,7 +47,7 @@ public class serverGUI {
 		frmServer.getContentPane().add(porta);
 		porta.setColumns(10);
 		
-		JTextArea log = new JTextArea();
+		 log = new JTextArea();
 		log.setEditable(false);
 		log.setBounds(10, 70, 474, 211);
 		frmServer.getContentPane().add(log);
@@ -77,31 +76,30 @@ stopserver.addActionListener(e ->{
 		
 		run = false;
 		
-		
 	}
-
-	
-	
 	
 });
-
-
-public String getPort(){
-	while(true){
-		if(!run)
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		else {
-			return porta.gettext();
 	}
+
+	public synchronized String getport() {
+	
+		while(true){
+			if(!run)
+				try {
+					wait();
+				} catch (InterruptedException e) {
+					
+					e.printStackTrace();
+				}
+			else
+				
+				return porta.getText();
+		}
 	
 }
-}
-
-
-
-}
+	
+	public int write(String s){
+		log.append(s + "\n");
+		return 0;
+	}
 }
