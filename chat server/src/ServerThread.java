@@ -3,6 +3,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.function.Function;
 
 
 public class ServerThread extends Thread {
@@ -10,9 +11,13 @@ public class ServerThread extends Thread {
     private ArrayList<ServerThread> threadList;
     private PrintWriter output;
 
+    private Function a;
+    
     public ServerThread(Socket socket, ArrayList<ServerThread> threads) {
         this.socket = socket;
         this.threadList = threads;
+        this.a = a;
+        
     }
 
     @Override
@@ -34,14 +39,14 @@ public class ServerThread extends Thread {
                     break;
                 }
                 printToALlClients( outputString );
-                System.out.println( outputString);
+                a.apply(outputString);
                
 
             }
 
 
         } catch (Exception e) {
-            System.err.println("Client Disconnesso");
+        	a.apply("Client Disconnesso");
         }
     }
 

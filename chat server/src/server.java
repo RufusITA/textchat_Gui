@@ -3,13 +3,20 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class server {
-
-    public static void main(String[] args) {
+	
+	static serverGUI w;
+	
+		
+	public static void main(String[] args) {
       
-    	System.out.println("inizializzazione server......");
+		serverGUI window = new serverGUI();
+		
+		w = window;		
+				
+			
         ArrayList<ServerThread> threadList = new ArrayList<>();
-        try (ServerSocket serversocket = new ServerSocket(25565)){
-
+        try (ServerSocket serversocket = new ServerSocket(/*Integer.parseInt(w.getPort())*/5000)){
+        	
         	System.out.println("server pronto!");
             while(true) {
                 Socket socket = serversocket.accept();
@@ -20,7 +27,6 @@ public class server {
                 threadList.add(serverThread); 
                 serverThread.start();
 
-                //get all the list of currently running thread
 
             }
         } catch (Exception e) {

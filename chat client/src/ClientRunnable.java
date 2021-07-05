@@ -1,7 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
+
 import java.net.Socket;
 import java.util.function.Function;
 
@@ -20,9 +20,11 @@ public class ClientRunnable implements Runnable {
     public void run() {
         
             try {
-                while(true) {
+            	
+            	a.apply("Connesso");
+            	while(true) {
                     String response = input.readLine();
-                    System.out.println(response);
+                    
                     a.apply(response);
                 }
             } catch (IOException e) {

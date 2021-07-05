@@ -4,68 +4,104 @@ import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JTextArea;
+import javax.swing.JLabel;
 
 public class serverGUI {
 
+	private static final String String = null;
 	private JFrame frmServer;
-	private JTextField textField;
+	private JTextField porta;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					serverGUI window = new serverGUI();
-					window.frmServer.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the application.
-	 */
+	private boolean run = false;
+	
 	public serverGUI() {
+		
 		initialize();
+		
+		frmServer.setVisible(true);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	public void initialize() {
 		frmServer = new JFrame();
+		frmServer.setResizable(false);
 		frmServer.setTitle("Server ");
-		frmServer.setBounds(100, 100, 450, 300);
+		frmServer.setBounds(100, 100, 510, 326);
 		frmServer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmServer.getContentPane().setLayout(null);
 		
 		JButton startserver = new JButton("Start");
-		startserver.setBounds(75, 11, 89, 23);
+		startserver.setBounds(125, 11, 89, 23);
 		frmServer.getContentPane().add(startserver);
 		
 		JButton stopserver = new JButton("Stop");
-		stopserver.setBounds(248, 11, 89, 23);
+		stopserver.setBounds(275, 11, 89, 23);
 		frmServer.getContentPane().add(stopserver);
 		
-		textField = new JTextField();
-		textField.setBounds(192, 45, 97, 20);
-		frmServer.getContentPane().add(textField);
-		textField.setColumns(10);
+		porta = new JTextField();
+		porta.setBounds(223, 45, 97, 20);
+		frmServer.getContentPane().add(porta);
+		porta.setColumns(10);
 		
-		JTextPane txtpnPortaServer = new JTextPane();
-		txtpnPortaServer.setEditable(false);
-		txtpnPortaServer.setText("Porta Server : ");
-		txtpnPortaServer.setBounds(118, 45, 97, 20);
-		frmServer.getContentPane().add(txtpnPortaServer);
+		JTextArea log = new JTextArea();
+		log.setEditable(false);
+		log.setBounds(10, 70, 474, 211);
+		frmServer.getContentPane().add(log);
 		
-		JTextArea textArea = new JTextArea();
-		textArea.setEditable(false);
-		textArea.setBounds(10, 70, 414, 180);
-		frmServer.getContentPane().add(textArea);
+		JLabel lblNewLabel = new JLabel("Porta : ");
+		lblNewLabel.setBounds(175, 45, 63, 20);
+		frmServer.getContentPane().add(lblNewLabel);
+		
+		
+startserver.addActionListener(e->{
+	
+	if(!run) {
+	log.append("inizializzazione server.... \n");
+	
+	run = true;
+	synchronized(this){notifyAll();}
 	}
+});
+
+
+stopserver.addActionListener(e ->{
+	
+	if(run) {
+		
+		log.append("Server stoppato \n");
+		
+		run = false;
+		
+		
+	}
+
+	
+	
+	
+});
+
+
+public String getPort(){
+	while(true){
+		if(!run)
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		else {
+			return porta.gettext();
+	}
+	
+}
+}
+
+
+
+}
 }

@@ -1,9 +1,8 @@
-import java.awt.EventQueue;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
+import java.util.function.Function;
+
 
  
 
@@ -11,6 +10,8 @@ public class client {
 	
 	static ClientGUI w;
     
+	static boolean stop = false;
+	
 	public static void main(String[] args) {
     	
     	/*EventQueue.invokeLater(new Runnable() {
@@ -19,6 +20,7 @@ public class client {
 					ClientGUI window = new ClientGUI();
 					w = window;
 			
+					
 			/*	} catch (Exception e) {
 					System.err.print("errore grafico");
 				}
@@ -26,18 +28,16 @@ public class client {
 		});*/
     	
 		buffer b = w.getbuffer();
+    	do {
+    		
     	
         try (Socket socket = new Socket(w.getIp(), Integer.parseInt(w.getPort()) )){
          
-            BufferedReader input = new BufferedReader( new InputStreamReader(socket.getInputStream()));
-            
-            
             PrintWriter output = new PrintWriter(socket.getOutputStream(),true);
 
             
             String userInput;
-            String response;
-            String clientName = "empty";
+         
 
             ClientRunnable clientRun = new ClientRunnable(socket,(String message)->{return w.write(message);});
 
@@ -50,18 +50,21 @@ public class client {
                     output.println(userInput);
                     if (userInput.equals("exit")) {
                         //reading the input from server
+                    	stop = true;
                         break;
                 }
 
            } while (!userInput.equals("exit"));
            
-
+           
 
             
         } catch (Exception e) {
-            System.err.println("Errore  " );
-            
-            e.printStackTrace();
-    }
-    }
+      
+				System.err.println("errore");
+		
+        }
+    }while(!stop);
+    	
+	}
 }

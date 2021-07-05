@@ -1,4 +1,3 @@
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
@@ -13,6 +12,7 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JScrollBar;
 
 
 
@@ -24,37 +24,15 @@ public class ClientGUI {
 	String name = "";
 	
 	private buffer buffo;
-	
+	private JTextArea schermo;
 	private JFrame frmChatTextprealpha;
 	private JTextField input;
 	private JTextField Nick;
 	private JTextField ip1;
 	private JTextField porta1;
 	private boolean run = false;
-	private JTextArea schermo;
-	/**
-	 * Launch the application.
-	 */
-/*	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ClientGUI window = new ClientGUI();
-					window.frmChatTextprealpha.setVisible(true);
-					
-					
-					
-					
-				} catch (Exception e) {
-					System.err.print("errore grafico");
-				}
-			}
-		});
-	}
-*/
-	/**
-	 * Create the application.
-	 */
+
+	
 	public ClientGUI() {
 		
 		try {
@@ -71,19 +49,15 @@ public class ClientGUI {
 		
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
+
 	private void initialize() {
 		
 		
 		buffo = new buffer();
 		
 		
-		
-		
 		frmChatTextprealpha = new JFrame();
-		frmChatTextprealpha.setTitle("Client (pre-alpha V.0.1)");
+		frmChatTextprealpha.setTitle("Client (pre-alpha V.0.12)");
 		frmChatTextprealpha.setResizable(false);
 		frmChatTextprealpha.setBounds(100, 100, 750, 480);
 		frmChatTextprealpha.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -102,12 +76,6 @@ public class ClientGUI {
 		Nick.setBounds(87, 11, 261, 20);
 		frmChatTextprealpha.getContentPane().add(Nick);
 		Nick.setColumns(10);
-		
-		schermo = new JTextArea();
-		schermo.setBackground(Color.WHITE);
-		schermo.setEditable(false);
-		schermo.setBounds(87, 104, 519, 275);
-		frmChatTextprealpha.getContentPane().add(schermo);
 		
 		
 		JTextPane txtpnPrealphaV = new JTextPane();
@@ -143,22 +111,22 @@ public class ClientGUI {
 		frmChatTextprealpha.getContentPane().add(bconnect);
 		
 		JLabel lblNewLabel = new JLabel("NickName : ");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		lblNewLabel.setBounds(16, 11, 89, 20);
 		frmChatTextprealpha.getContentPane().add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Server IP : ");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		lblNewLabel_1.setBounds(16, 42, 72, 20);
 		frmChatTextprealpha.getContentPane().add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("Server Port : ");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		lblNewLabel_2.setBounds(16, 73, 72, 20);
 		frmChatTextprealpha.getContentPane().add(lblNewLabel_2);
 		
 		JTextArea nickdisplay = new JTextArea();
-		nickdisplay.setFont(new Font("Arial", Font.PLAIN, 13));
+		nickdisplay.setFont(new Font("Arial Black", Font.PLAIN, 12));
 		nickdisplay.setEditable(false);
 		nickdisplay.setBounds(587, 40, 133, 22);
 		frmChatTextprealpha.getContentPane().add(nickdisplay);
@@ -166,6 +134,19 @@ public class ClientGUI {
 		JLabel lblNewLabel_3 = new JLabel("NickName settato : ");
 		lblNewLabel_3.setBounds(471, 42, 116, 20);
 		frmChatTextprealpha.getContentPane().add(lblNewLabel_3);
+		
+		schermo = new JTextArea();
+		schermo.setEditable(false);
+		schermo.setBounds(87, 104, 519, 275);
+		frmChatTextprealpha.getContentPane().add(schermo);
+		
+		JScrollBar scrollBar = new JScrollBar();
+		scrollBar.setBounds(610, 104, 17, 274);
+		frmChatTextprealpha.getContentPane().add(scrollBar);
+		
+		JButton stopconnection = new JButton("Disconnetti");
+		stopconnection.setBounds(587, 73, 89, 23);
+		frmChatTextprealpha.getContentPane().add(stopconnection);
 		
 		
 		nickbot.addActionListener(e->{
@@ -176,18 +157,35 @@ public class ClientGUI {
 			
 		});
 		
+		Nick.addKeyListener(new KeyAdapter() {
+
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					nickbot.doClick();
+				}
+			}
+		});
+		
 		bconnect.addActionListener(e->{
 			
 			run = true;
 			synchronized(this){notifyAll();}
 
-			
 		});
+		
+		stopconnection.addActionListener(e->{
+			
+			buffo.add("exit \n");
+			
+			schermo.append("Disconnesso");
+		});
+		
+		
 		send.addActionListener(e->{
 			
 			String in2 = input.getText();
 			
-			in = "(" + name + ") " + in2;
+			in ="[" + name + "]  " + in2;
 			
 			buffo.add(in + "\n");
 			
@@ -217,7 +215,7 @@ public class ClientGUI {
 				try {
 					wait();
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			else
@@ -231,7 +229,7 @@ public class ClientGUI {
 				try {
 					wait();
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			else
@@ -241,7 +239,7 @@ public class ClientGUI {
 	}
 	
 	public int write(String s){
-		schermo.append(s+"\n");
+		schermo.append(s + "\n");
 		return 0;
 	}
 }
