@@ -2,7 +2,7 @@
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
-import javax.swing.JTextPane;
+
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JTextArea;
@@ -12,7 +12,8 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import javax.swing.JScrollBar;
+
+import javax.swing.JScrollPane;
 
 
 
@@ -57,7 +58,7 @@ public class ClientGUI {
 		
 		
 		frmChatTextprealpha = new JFrame();
-		frmChatTextprealpha.setTitle("Client (pre-alpha V.0.12)");
+		frmChatTextprealpha.setTitle("Client (pre-alpha V.0.2)");
 		frmChatTextprealpha.setResizable(false);
 		frmChatTextprealpha.setBounds(100, 100, 750, 480);
 		frmChatTextprealpha.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -77,16 +78,7 @@ public class ClientGUI {
 		frmChatTextprealpha.getContentPane().add(Nick);
 		Nick.setColumns(10);
 		
-		
-		JTextPane txtpnPrealphaV = new JTextPane();
-		txtpnPrealphaV.setForeground(Color.RED);
-		txtpnPrealphaV.setBackground(Color.WHITE);
-		txtpnPrealphaV.setEditable(false);
-		txtpnPrealphaV.setText("pre-alpha V.0.12");
-		txtpnPrealphaV.setBounds(587, 11, 133, 20);
-		frmChatTextprealpha.getContentPane().add(txtpnPrealphaV);
-		
-		JButton send = new JButton("INVIA");
+		JButton send = new JButton("SEND");
 		send.setBounds(631, 389, 89, 23);
 		frmChatTextprealpha.getContentPane().add(send);
 		
@@ -97,20 +89,21 @@ public class ClientGUI {
 		ip1.setColumns(10);
 		
 		porta1 = new JTextField();
+		porta1.setText("7777");
 		porta1.setFont(new Font("Arial", Font.PLAIN, 11));
 		porta1.setBounds(87, 73, 261, 20);
 		frmChatTextprealpha.getContentPane().add(porta1);
 		porta1.setColumns(10);
 		
-		JButton nickbot = new JButton("assegna");
-		nickbot.setBounds(358, 11, 86, 20);
+		JButton nickbot = new JButton("Set");
+		nickbot.setBounds(358, 11, 72, 20);
 		frmChatTextprealpha.getContentPane().add(nickbot);
 		
-		JButton bconnect = new JButton("Connetti");
-		bconnect.setBounds(482, 72, 89, 23);
+		JButton bconnect = new JButton("Connect");
+		bconnect.setBounds(631, 105, 89, 23);
 		frmChatTextprealpha.getContentPane().add(bconnect);
 		
-		JLabel lblNewLabel = new JLabel("NickName : ");
+		JLabel lblNewLabel = new JLabel("UserName : ");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		lblNewLabel.setBounds(16, 11, 89, 20);
 		frmChatTextprealpha.getContentPane().add(lblNewLabel);
@@ -128,25 +121,33 @@ public class ClientGUI {
 		JTextArea nickdisplay = new JTextArea();
 		nickdisplay.setFont(new Font("Arial Black", Font.PLAIN, 12));
 		nickdisplay.setEditable(false);
-		nickdisplay.setBounds(587, 40, 133, 22);
+		nickdisplay.setBounds(587, 8, 133, 22);
 		frmChatTextprealpha.getContentPane().add(nickdisplay);
 		
-		JLabel lblNewLabel_3 = new JLabel("NickName settato : ");
-		lblNewLabel_3.setBounds(471, 42, 116, 20);
+		JLabel lblNewLabel_3 = new JLabel("username set :");
+		lblNewLabel_3.setBounds(490, 10, 116, 20);
 		frmChatTextprealpha.getContentPane().add(lblNewLabel_3);
 		
-		schermo = new JTextArea();
-		schermo.setEditable(false);
-		schermo.setBounds(87, 104, 519, 275);
-		frmChatTextprealpha.getContentPane().add(schermo);
-		
-		JScrollBar scrollBar = new JScrollBar();
-		scrollBar.setBounds(610, 104, 17, 274);
-		frmChatTextprealpha.getContentPane().add(scrollBar);
-		
-		JButton stopconnection = new JButton("Disconnetti");
-		stopconnection.setBounds(587, 73, 89, 23);
+		JButton stopconnection = new JButton("Disconnect");
+		stopconnection.setBounds(631, 139, 89, 23);
 		frmChatTextprealpha.getContentPane().add(stopconnection);
+		
+		JLabel lblNewLabel_4 = new JLabel("pre - alpha V.0.2");
+		lblNewLabel_4.setForeground(Color.RED);
+		lblNewLabel_4.setBounds(641, 423, 93, 17);
+		frmChatTextprealpha.getContentPane().add(lblNewLabel_4);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setFocusable(false);
+		scrollPane.setAutoscrolls(true);
+		scrollPane.setBounds(87, 104, 519, 275);
+		frmChatTextprealpha.getContentPane().add(scrollPane);
+		
+		schermo = new JTextArea();
+		schermo.setDragEnabled(true);
+		schermo.setFocusable(false);
+		scrollPane.setViewportView(schermo);
+		schermo.setEditable(false);
 		
 		
 		nickbot.addActionListener(e->{
@@ -167,17 +168,24 @@ public class ClientGUI {
 		});
 		
 		bconnect.addActionListener(e->{
+			if(run) {
+				buffo.add("exit");
+				
+				synchronized(this){notifyAll();}
+			}
+			else {
+			run=true;
 			
-			run = true;
 			synchronized(this){notifyAll();}
-
+			}
 		});
 		
 		stopconnection.addActionListener(e->{
 			
-			buffo.add("exit \n");
+			run = false;
 			
-			schermo.append("Disconnesso");
+			buffo.add("exit");
+			
 		});
 		
 		
@@ -240,6 +248,13 @@ public class ClientGUI {
 	
 	public int write(String s){
 		schermo.append(s + "\n");
+		return 0;
+	}
+	
+public int connesso(boolean connected) {
+		
+		run = connected;
+		
 		return 0;
 	}
 }

@@ -9,33 +9,35 @@ public class ClientRunnable implements Runnable {
 
     private Socket socket;
     private BufferedReader input;
-    private Function a;
+    @SuppressWarnings("rawtypes")
+	private Function a;
 
     public ClientRunnable(Socket s, Function<String,Integer> a ) throws IOException {
         this.socket = s;
         this.input = new BufferedReader( new InputStreamReader(socket.getInputStream()));
         this.a =a;
     }
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public void run() {
         
             try {
             	
-            	a.apply("Connesso");
+            	
             	while(true) {
                     String response = input.readLine();
                     
                     a.apply(response);
                 }
             } catch (IOException e) {
-               a.apply("Error connection");
-               System.err.println("con err");
+               a.apply("Disconnected");
+               
             } finally {
                 try {
                     input.close();
                 } catch (Exception e) {
-                    a.apply("error disconnecting...");
-                    System.err.println("esploso");
+                    a.apply("Logout failed...(restart)");
+                   
                     
                 }
             }

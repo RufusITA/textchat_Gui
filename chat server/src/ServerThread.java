@@ -13,44 +13,44 @@ public class ServerThread extends Thread {
 
     private Function<String, ?> a;
     
-    public ServerThread(Socket socket, ArrayList<ServerThread> threads) {
+    public ServerThread(Socket socket,Function<String,Integer> a, ArrayList<ServerThread> threads) {
         this.socket = socket;
         this.threadList = threads;
-        extracted();
+        this.a = a;
         
     }
-
-	private Function<String, ?> extracted() {
-		return this.a = a;
-	}
 
     @Override
     public void run() {
         try {
-            //Reading the input from Client
+            
             BufferedReader input = new BufferedReader( new InputStreamReader(socket.getInputStream()));
             
-            //returning the output to the client : true statement is to flush the buffer otherwise
-            //we have to do it manuallyy
              output = new PrintWriter(socket.getOutputStream(),true);
 
-
+             printToALlClients("a user connected");
+             
             //inifite loop for server
             while(true) {
                 String outputString = input.readLine();
+                a.apply(outputString);
                 //if user types exit command
                 if(outputString.equals("exit")) {
                     break;
                 }
+                else {
                 printToALlClients( outputString );
-                a.apply(outputString);
-               
-
+                }
             }
 
 
         } catch (Exception e) {
-        	a.apply("Client Disconnesso");
+        	
+        	printToALlClients("a user has logged out");
+        	
+        	a.apply("Client Disconnected");
+        	
+        	
         	
         }
     }

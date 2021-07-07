@@ -1,7 +1,7 @@
 
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.function.Function;
+
 
 
  
@@ -13,28 +13,18 @@ public class client {
 	static boolean stop = false;
 	
 	public static void main(String[] args) {
-    	
-    	/*EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {*/
+  
 					ClientGUI window = new ClientGUI();
 					w = window;
-			
-					
-			/*	} catch (Exception e) {
-					System.err.print("errore grafico");
-				}
-			}
-		});*/
-    	while(true) {
+		
+    	while(true) {	 
     		
-    	
 		buffer b = w.getbuffer();
-    	do {
-    		
-    	
-        try (Socket socket = new Socket(w.getIp(), Integer.parseInt(w.getPort()) )){
-         
+		
+        try (Socket socket = new Socket(w.getIp(), Integer.parseInt(w.getPort()))){
+        	
+        	w.write("Connected");
+        	
             PrintWriter output = new PrintWriter(socket.getOutputStream(),true);
 
             
@@ -47,27 +37,31 @@ public class client {
             new Thread(clientRun).start();
            
            do {
-               
+       
                     userInput = b.getString();
-                    output.println(userInput);
+                    
                     if (userInput.equals("exit")) {
-                        //reading the input from server
-                    	stop = true;
+
                         break;
                 }
+                
+                output.println(userInput);
 
            } while (!userInput.equals("exit"));
-           
-           
 
             
         } catch (Exception e) {
-      
-				System.err.println("errore");
+        		 
+        		w.connesso(false);
+				w.write("not connected successfully");
 		
         }
-    }while(!stop);
+        
+        if(stop) {
+        	w.connesso(false);
+        }
+    }
     	
-	}
+	
 }
 	}
