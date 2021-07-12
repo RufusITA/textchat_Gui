@@ -9,7 +9,7 @@ import javax.swing.JScrollPane;
 
 public class serverGUI {
 
-	static server ser;
+	private server s;
 	
 	
 	private JFrame frmServer;
@@ -20,6 +20,7 @@ public class serverGUI {
 	private JScrollPane scrollPane;
 	
 	public serverGUI() {
+	
 		
 		initialize();
 		
@@ -30,6 +31,9 @@ public class serverGUI {
 	 * Initialize the contents of the frame.
 	 */
 	public void initialize() {
+		
+	
+		
 		frmServer = new JFrame();
 		frmServer.setResizable(false);
 		frmServer.setTitle("Server pre-alpha V.0.2");
@@ -79,7 +83,7 @@ stopserver.addActionListener(e ->{
 	
 	if(run) {
 		
-		ser.stop();
+		s.stop();
 		
 		run = false;
 		
@@ -108,6 +112,10 @@ stopserver.addActionListener(e ->{
 	public int write(String s){
 		log.append(s + "\n");
 		return 0;
+	}
+	
+	public void connetto(server sus) {
+		this.s = sus;
 	}
 	
 	

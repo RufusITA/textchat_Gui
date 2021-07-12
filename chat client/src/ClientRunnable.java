@@ -24,8 +24,13 @@ public class ClientRunnable implements Runnable {
             try {
             	
             	
-            	while(true) {
+            	while(socket.isConnected()) {
                     String response = input.readLine();
+                    
+                    if(response==null) 
+                    	throw new IOException("String null");
+                    
+                    
                     
                     a.apply(response);
                 }
